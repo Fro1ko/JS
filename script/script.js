@@ -10,9 +10,9 @@ let period = 6;
 function showTypeOf(type) {
   console.log(type);
 }
-showTypeOf(money);
-showTypeOf(income);
-showTypeOf(deposit);
+showTypeOf(typeof(money));
+showTypeOf(typeof(income));
+showTypeOf(typeof(deposit));
 
 console.log(addExpenses.toLowerCase());
 console.log(addExpenses.split(","));
@@ -29,9 +29,9 @@ function getExpensesMonth(a, b) {
   if (!b) {
     b = 0;
   }
-  return amount1 + amount2;
+  return a + b;
 }
-console.log(getExpensesMonth()); 
+console.log(getExpensesMonth(amount1, amount2)); 
 
 function getAccumulatedMonth(monthMoney, expenses) {
   if (!expenses) {
@@ -39,15 +39,16 @@ function getAccumulatedMonth(monthMoney, expenses) {
   }
   return monthMoney - expenses;
 }
-let accumulatedMonth = getAccumulatedMonth(money, getExpensesMonth());
+let accumulatedMonth = getAccumulatedMonth(money, getExpensesMonth(amount1, amount2));
 console.log(accumulatedMonth);
 
-function getTargetMonth(targetMission, budjetDay) {
-  return Math.ceil(targetMission / budjetDay);
+function getTargetMonth(targetMission, budjetMonth) {
+  return Math.ceil(targetMission / budjetMonth);
 }
 console.log(getTargetMonth(mission, accumulatedMonth));
 
 let budgetDay = accumulatedMonth / 30;
+console.log(budgetDay);
 
 function getStatusIncome() {
   if (budgetDay >= 1200) {
