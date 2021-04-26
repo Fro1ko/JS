@@ -4,6 +4,11 @@ let isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
+let isString = (str, comma = false) => {
+  let pattern = comma ? /^[, а-яА-ЯёЁa-zA-Z]+$/ : /^[ а-яА-ЯёЁa-zA-Z]+$/;
+  return pattern.test(str);
+};
+
 let money;
 do {
   money = prompt("Ваш месячный доход?");
@@ -19,15 +24,37 @@ let appData = {
   expenses: {},
   addExpenses: [],
   deposit: false,
+  percentDeposit: 0,
+  moneyDeposit: 0,
   mission: 1000000,
   period: 6,
   asking: function () {
+
+    if (confirm("Есть ли у вас доп. заработок?")) {
+      let itemIncome = "";
+      let cashIncome = 0;
+      do {
+        itemIncome = prompt("какой у вас доп. заработок?");
+      }
+      while (!isString(itemIncome));
+
+      do {
+        cashIncome = prompt("сколько вы на этом зарабатываете?");
+      }
+      while (!isNumber(cashIncome));
+      appData.income[itemIncome] = +cashIncome;
+    }
+
     let addExpenses = prompt("Перечислите возможные расходы за рассчитываемый период через запятую");
     appData.addExpenses = addExpenses.toLowerCase().split(",");
     appData.deposit = confirm("Есть ли у вас депозит в банке?");
 
     for (let i = 0; i < 2; i++) {
-      appData.expenses[prompt('Введите обязательную статью расходов?')] = (() => {
+      let str = "";
+      do {
+        str = prompt('Введите обязательную статью расходов?');
+      } while (!isString(str));
+      appData.expenses[str] = (() => {
         let n = 0;
         do {
           n = prompt('Во сколько это обойдется?');
@@ -65,6 +92,18 @@ let appData = {
     } else {
       console.log("Что то пошло не так");
     }
+  },
+  getInfoDeposit: function () {
+    if (appData.deposit) {
+      appData.percentDeposit = prompt("какой годовой процент?");
+      do {
+        appData.moneyDeposit = prompt("какая сумма заложена?");
+      }
+      while (!isNumber(appData.moneyDeposit));
+    }
+  },
+  calcSavedMoney: function () {
+    return appData.budgetMonth * appData.period;
   }
 };
 appData.asking();
@@ -80,3 +119,6 @@ console.log('Наша программа включает в себя данны
 for (let el in appData) {
   console.log(el, appData[el]);
 }
+appData.getInfoDeposit();
+
+console.log(appData.addExpenses.map(n => `${n[0].toUpperCase()}${n.slice(1)}`).join(', '));
