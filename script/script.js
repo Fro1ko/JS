@@ -95,7 +95,11 @@ let appData = {
   },
   getInfoDeposit: function () {
     if (appData.deposit) {
-      appData.percentDeposit = prompt("какой годовой процент?");
+
+      do {
+        appData.percentDeposit = prompt("какой годовой процент?");
+      }
+      while (!isNumber(appData.percentDeposit));
       do {
         appData.moneyDeposit = prompt("какая сумма заложена?");
       }
